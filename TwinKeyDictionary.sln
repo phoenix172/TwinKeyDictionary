@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinKeyDictionary", "TwinKe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinKeyDictionaryTests", "TwinKeyDictionaryTests\TwinKeyDictionaryTests.csproj", "{981CCCD9-11C3-40A0-8FB4-63EB21E274D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinKeyDictionary.NetStandard", "TwinKeyDictionary.NetStandard\TwinKeyDictionary.NetStandard.csproj", "{BED7DEBF-9467-4C4C-936F-6AAD26C01FFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinKeyDictionary.NetStandardTests", "TwinKeyDictionary.NetStandardTests\TwinKeyDictionary.NetStandardTests.csproj", "{937D605E-84BF-4D4F-80B8-A98EA1F0AD4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{981CCCD9-11C3-40A0-8FB4-63EB21E274D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{981CCCD9-11C3-40A0-8FB4-63EB21E274D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{981CCCD9-11C3-40A0-8FB4-63EB21E274D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BED7DEBF-9467-4C4C-936F-6AAD26C01FFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BED7DEBF-9467-4C4C-936F-6AAD26C01FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BED7DEBF-9467-4C4C-936F-6AAD26C01FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BED7DEBF-9467-4C4C-936F-6AAD26C01FFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{937D605E-84BF-4D4F-80B8-A98EA1F0AD4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{937D605E-84BF-4D4F-80B8-A98EA1F0AD4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{937D605E-84BF-4D4F-80B8-A98EA1F0AD4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{937D605E-84BF-4D4F-80B8-A98EA1F0AD4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

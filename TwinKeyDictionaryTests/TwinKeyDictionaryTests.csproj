@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TwinKeyDictionary.NetStandard\TwinKeyDictionary.NetStandard.csproj">
+      <Project>{bed7debf-9467-4c4c-936f-6aad26c01ffe}</Project>
+      <Name>TwinKeyDictionary.NetStandard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TwinKeyDictionary\TwinKeyDictionary.csproj">
       <Project>{9de2d068-7317-4df0-88b6-1d61bcacc282}</Project>
       <Name>TwinKeyDictionary</Name>

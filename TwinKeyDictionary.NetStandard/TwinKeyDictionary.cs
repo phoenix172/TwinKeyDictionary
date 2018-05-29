@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TwinKeyDictionary
+namespace TwinKeyDictionary.NetStandard
 {
     /// <summary>
     /// Represents a dictionary with two keys.
@@ -13,7 +13,7 @@ namespace TwinKeyDictionary
     /// <typeparam name="TKeySecondary">The type of the secondary key.</typeparam>
     /// <typeparam name="TValue">The type of the values in the dictionary.</typeparam>
     public class TwinKeyDictionary<TKeyPrimary,TKeySecondary,TValue> :  
-        Dictionary<Tuple<TKeyPrimary, TKeySecondary>, TValue>,
+        Dictionary<(TKeyPrimary Primary, TKeySecondary Secondary), TValue>,
         IDictionary<TKeyPrimary, TValue>
     {
         ICollection<TKeyPrimary> IDictionary<TKeyPrimary, TValue>.Keys => Keys.Select(x => x.Item1).Distinct().ToList();
@@ -24,8 +24,8 @@ namespace TwinKeyDictionary
 
         public TValue this[TKeyPrimary primaryKey, TKeySecondary secondaryKey]
         {
-            get { return base[Tuple.Create(primaryKey, secondaryKey)]; }
-            set { base[Tuple.Create(primaryKey, secondaryKey)] = value; }
+            get { return base[(primaryKey, secondaryKey)]; }
+            set { base[(primaryKey, secondaryKey)] = value; }
         }
 
         public TValue this[TKeyPrimary primaryKey]
@@ -36,12 +36,12 @@ namespace TwinKeyDictionary
 
         public void Add(TKeyPrimary primaryKey, TKeySecondary secondaryKey, TValue value)
         {
-            Add(Tuple.Create(primaryKey, secondaryKey), value);
+            Add((primaryKey, secondaryKey), value);
         }
 
         public bool ContainsKey(TKeyPrimary primaryKey, TKeySecondary secondaryKey)
         {
-            return ContainsKey(Tuple.Create(primaryKey, secondaryKey));
+            return ContainsKey((primaryKey, secondaryKey));
         }
 
         public bool ContainsKey(TKeyPrimary primaryKey)
@@ -49,16 +49,15 @@ namespace TwinKeyDictionary
             return ContainsKey(primaryKey, out _);
         }
 
-        private bool ContainsKey(TKeyPrimary primaryKey, out Tuple<TKeyPrimary, TKeySecondary> key)
+        private bool ContainsKey(TKeyPrimary primaryKey, out (TKeyPrimary, TKeySecondary) key)
         {
-            key = GetKeyByPrimary(primaryKey);
-            return key != null;
+            return TryGetKeyByPrimary(primaryKey, out key);
         }
 
         public bool TryGetValue(TKeyPrimary primaryKey, out TValue value)
         {
             value = default(TValue);
-            if (ContainsKey(primaryKey, out var key))
+            if (ContainsKey(primaryKey, out (TKeyPrimary, TKeySecondary) key))
             {
                 value = this[key];
                 return true;
@@ -68,12 +67,25 @@ namespace TwinKeyDictionary
 
         public bool TryGetValue(TKeyPrimary primaryKey, TKeySecondary secondaryKey, out TValue value)
         {
-            return TryGetValue(Tuple.Create(primaryKey, secondaryKey), out value);
+            return TryGetValue((primaryKey, secondaryKey), out value);
         }
 
-        private Tuple<TKeyPrimary, TKeySecondary> GetKeyByPrimary(TKeyPrimary primaryKey)
+        private bool TryGetKeyByPrimary(TKeyPrimary primaryKey, out (TKeyPrimary Primary, TKeySecondary Secondary) key)
         {
-            return Keys.FirstOrDefault(x => x.Item1.Equals(primaryKey));
+            List<(TKeyPrimary Primary, TKeySecondary Secondary)> keys = Keys.Where(x => x.Primary.Equals(primaryKey)).ToList();
+            if (keys.Any())
+            {
+                key = keys.First();
+                return true;
+            }
+
+            key = default;
+            return false;
+        }
+
+        private (TKeyPrimary, TKeySecondary) GetKeyByPrimary(TKeyPrimary primaryKey)
+        {
+            return Keys.FirstOrDefault(x => x.Primary.Equals(primaryKey));
         }
 
         public bool Remove(TKeyPrimary primaryKey)
@@ -85,12 +97,12 @@ namespace TwinKeyDictionary
 
         public bool Remove(TKeyPrimary primaryKey, TKeySecondary secondaryKey)
         {
-            return Remove(Tuple.Create(primaryKey, secondaryKey));
+            return Remove((primaryKey, secondaryKey));
         }
 
         public void Add(TKeyPrimary key, TValue value)
         {
-            Add(Tuple.Create(key, default(TKeySecondary)), value);
+            Add((key, default(TKeySecondary)), value);
         }
 
         public void Add(KeyValuePair<TKeyPrimary, TValue> item)
@@ -102,7 +114,7 @@ namespace TwinKeyDictionary
         {
             bool hasKey = ContainsKey(item.Key, out var key);
             if (!hasKey) return false;
-            return this.Contains(new KeyValuePair<Tuple<TKeyPrimary, TKeySecondary>, TValue>(key, item.Value));
+            return this.Contains(new KeyValuePair<(TKeyPrimary, TKeySecondary), TValue>(key, item.Value));
         }
 
         public void CopyTo(KeyValuePair<TKeyPrimary, TValue>[] array, int arrayIndex)
@@ -122,8 +134,8 @@ namespace TwinKeyDictionary
 
         private IEnumerable<KeyValuePair<TKeyPrimary, TValue>> AsBaseEnumerable()
         {
-            return (this as IEnumerable<KeyValuePair<Tuple<TKeyPrimary, TKeySecondary>, TValue>>)
-                .Select(x => new KeyValuePair<TKeyPrimary, TValue>(x.Key.Item1, x.Value));
+            return (this as IEnumerable<KeyValuePair<(TKeyPrimary Primary, TKeySecondary Secondary), TValue>>)
+                .Select(x => new KeyValuePair<TKeyPrimary, TValue>(x.Key.Primary, x.Value));
         }
     }
 }
